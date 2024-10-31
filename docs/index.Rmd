@@ -214,7 +214,7 @@ Above are the results from telling R to 'print' the responses for those variable
 These problems arose from only a sample of 29. Imagine how messy text responses can get when you have tens of thousands of respondents! I mention this not to completely dissuade you from using text responses in a survey; sometimes text responses are extremely useful, even necessary. Text responses within surveys however, can sometimes highlight an aspect of data collection that is counterintuitive: in an attempt to force specificity from respondents, we can sometimes muddy our own data and make things less clear than if we'd provided fewer chances for specificity.
 
 What can we do about this then?
-``` {r race and ethnicity 3, echo=FALSE}
+``` {r race and ethnicity 3}
 df %>%
   dplyr::select(race) %>%
   print()
