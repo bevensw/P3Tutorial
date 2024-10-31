@@ -215,6 +215,9 @@ These problems arose from only a sample of 29. Imagine how messy text responses 
 
 What can we do about this then?
 ``` {r race and ethnicity 3}
+# Race variable as it currently exists. 
+table(df$race)
+# Let's combine clean things up. 
 df <- df %>%
   mutate(
     race = na_if(race, ""),  # convert empty name to NA
@@ -223,6 +226,8 @@ df <- df %>%
                   "More than one race, please specify:" = "More than one"), 
     race = replace_na(race, "Missing")
   )
+# Now let's look at our race variable. 
+table(df$race)
 ```
 I made another important decision for how we manipulate our data that could have significant effects during analysis: I chose to simply ignore the additional text responses to race and recode them simply as 'Other'. I made this decision based on a couple points: 
     1) Two of the three respondents who selected 'Other' gave text responses that I do not consider a valid option for 'race'. 
