@@ -315,6 +315,7 @@ When we talk about univariate, we're simply talking about one response variable 
 ```{r univariate plot 1}
 boxplot(df$age)
 ```
+
 Pretty simple; pretty cool however, we have access to an even more powerful method of generating figures: ggplot. 
 ``` {r univariate plot 2}
 df %>% 
@@ -328,6 +329,7 @@ df %>%
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks=element_blank()) +
   coord_flip() # We recieve a warning message here because 2 of our respondents do not have an age value/it appears as NA.
 ```
+
 With just a little bit extra code, we get something increasingly informative. More complex is not always good (the first boxplot would be totally fine as a check in your preparation or cleaning stage) however, for presentation purposes, we often want something that looks nicer or contains more information than base R boxplot() funcationality can offer us. 
 
 ## Practice plot
@@ -335,11 +337,13 @@ Let's break down ggplot() from the very basics. The first thing to appreciate ab
 ```{r univariate plot 3}
 ggplot(data = df, mapping=aes(x=age))
 ```
+
 Our figure is empty because we failed to add a very important layer: geoms. These are the geometric objects used to populate our figures. There are heaps of these, and people are constantly building new packages compatabile with ggplot() to make new fancy graphs all the time. We're going to stick with geom_barplot for consistency sake. We add new layers to our figure by connecting them with the '+' sign.  
 ```{r univariate plot 4}
 ggplot(data = df, mapping=aes(x=age)) +
   geom_boxplot()
 ```
+
 Now it is starting to resemble what we're after! You can play around with other geoms if you would like (geom_histogram would also work fine with these data), and ggplot makes this simple by allowing you to change just the layer you're interested in. FYI, we often start new layers on new lines for ease of reading and editing. 
 
 ## Customizations
@@ -348,11 +352,13 @@ We also have a range of customizations **within** our geoms, like color of the b
 ggplot(data = df, mapping=aes(x=age)) + 
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5)
 ```
+
 These are all fairly self-explanatory, and this is certainly a non-exhaustive list of things to customize except alpha, which refers to the transparency of an object. This can be useful as per above. We do not have any outliers in our data set so the 'outlier' colors and shape won't do anything but it is useful code to know. Finally, colors can also be represented by hex code if you want to get especially detailed.
 ``` {r univariate color brewer}
 ggplot(data = df, mapping=aes(x=age)) + 
   geom_boxplot(fill = "#ea9999", color = "#e06666", outlier.color = "#85f6db", outlier.shape = 16, outlier.size = 2, alpha = 0.5)
 ```
+
 These can be found on websites like [color-hex](https://www.color-hex.com/) where creators develop 'groups' of colors that work well together. There are also packages with pre-built color combos like colorbrewer. All in all, if you're anything like me you will waste hours customizing colors on figures when you could be doing actual work. 
 
 ## Shortcuts
@@ -365,6 +371,7 @@ ggplot(data = df, mapping=aes(x=age)) +
 ggplot(df, aes(age)) +
   geom_boxplot()
 ```
+
 These produce the exact same plot yet the latter requires significant less code. R is able to recognize that 'df' is the dataframe we're interested in using despite not telling it using 'data='. Similar with 'aes': R knows we are mapping this function without specifically telling it. R also automatically assigns 'age' as the independent variable here. 
 
 ## Piping 
@@ -374,6 +381,7 @@ df %>%
   ggplot(., aes(age)) +
   geom_boxplot()
 ```
+
 Here we first call the dataframe we want (df) and then pipe. The only change within the ggplot function is that we use '.' (period) in lieu of 'df' to tell R that we want to use the dataframe already called. This can be extremely useful as we can use a range of functions to change the dataframe before plotting.
 ```{r univariate piping 2}
 ## Filter for age
@@ -388,6 +396,7 @@ df %>%
   ggplot(aes(age)) +
   geom_boxplot()
 ```
+
 Here we used another dplyr function called 'filter' (very useful) to tell R that we're only interested in respondents aged under 40 for our first plot, or only interested in the ages of physicians OR nurses (we combined our knowledge of regex with filter here as well to get extra fancy).  
 
 ## Labelling
@@ -399,6 +408,7 @@ df %>%
   labs(y = "", x = "Age (years)", title = "Distribution of age within sample", subtitle = "All positions") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks=element_blank())
 ```
+
 There are two important layers for labelling: 'labs' layer, and the 'theme' layer. Labs is where we gave R all the text we're putting on are figure, and assigning them to different positions. We do not have need for a y-axis label so we assigned it an empty value with "". 
 
 The theme layer is where we can make further adjustments to the labs layer. Here we use combinations of functions to select title, subtitle, axis title, and then adjust their typeface, size, positioning and more. We can also use 'element_blank' functions in any of these titles/text to remove these from our figures. This is useful in our case as we did not need a y-axis title so we can save some space in our figure by elimintating this (this also means that in our 'lab' layer it was unnecessary for us to assing the y-axis label with an empty value since we were elminiating the entire title in our theme layer!).
@@ -413,6 +423,7 @@ df %>%
   labs(y = "", x = "Age (years)", title = "Distribution of age within sample", subtitle = "All positions") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks=element_blank())
 ```
+
 We added in a dashed line with geom_vline to indicate the mean as opposed to the median already built-in to our geom_boxplot, and then used annotate to add another layer of text to our figure to label it correctly. the 'na.rm' option allows us to tell the function to ignore any 'NA's within the variable (when set to TRUE), which can often cause issues within R when calculating different things. 
 
 This can be useful if you want to represent a difference between the median and the mean i.e., are there extreme valueds within these data and is that important to us. Effectively, we can include **any** value for the dashed line that may be useful to us. Perhaps we have a prior sample median that we want to impose on top of this one to show that our data is similar. 
@@ -439,6 +450,7 @@ df %>%
   labs(y = "", x = "Age (years)", title = "Distribution of age within sample", subtitle = "All positions") +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks=element_blank())
 ```
+
 Here we can see the usefulness of the function coord_flip as opposed to assigning 'age' to the y-axis: coord_flip simply swaps the aesthetics while keeping the scaling. Despite this, many of the prior layers we have customized now need to be updated: the x-axis is no longer the axis we want labelled and our geom_vline label is the wrong angle. 
 ``` {r coord flip}
 df %>% 
@@ -450,6 +462,7 @@ df %>%
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks=element_blank()) +
   coord_flip()
 ```
+
 We now have a pretty functional boxplot, not dissimilar to the earlier plot we produced. 
 
 ## Themes
@@ -465,6 +478,7 @@ df %>%
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks=element_blank()) +
   coord_flip()
 ```
+
 There are many 'theme' packages to apply to the overall look of our figures. theme_minimal() is a popular one but I frequently use theme_bw() also. Regardless, these can help.
 
 ## Geom_jitter
@@ -481,6 +495,7 @@ df %>%
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5, face="italic"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks=element_blank()) +
   coord_flip()
 ```
+
 I saved this until last because its addition to our figure requires us to amend our code a little bit. We received an error when we ran that code that says : *`geom_point()` requires the following missing aesthetics: y.*
 
 Geom_jitter requires us to assign a value to our y-axis (in our case this appears as our x-axis due to coord_flip).
@@ -513,6 +528,7 @@ df %>%
   guides(fill=guide_legend(title="Position")) +
   scale_y_continuous(breaks = seq(0, 7, by = 1))
 ```
+
 This is a standard bar chart good for plotting frequencies/count data. Some things we added here are:
     1) We added 'fill' to our aesthetic line (aes), which can allow us to be creative with how present data. In our case, we filled each bar with the same variable as we plotted our bars with but that will not always be the case. A common use of this is when we have data across time and we want to see how another variable changes across time. 
     2) We used the ColorBrewer package to assign a color palette to our figure - I really like the Pastel palettes!
@@ -547,6 +563,7 @@ df %>%
   scale_fill_brewer(palette = "Pastel2") +
   guides(fill=guide_legend(title="Position"))
 ```
+
 First plot shows the counts of positions within each ethnicity category; second plot shows each position as a proportion of the total number of the observations within each ethnicity category. The latter is a type of normalization, which can be useful when dealing with count data with unequal numbers across categories. 
 
 ## Scatterplot
@@ -565,6 +582,7 @@ df %>%
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold", size=14), legend.position="none")
 ```
+
 Here we can see what appears to be a negative association between age and distress i.e., younger people had higher distress scores compared to older people. We have included a trend line using the geom 'geom_smooth' with linear regression as the method to generate the parameters of this line, including the standard error. We can go one step further if we want additional stratification within our plot.
 ```{r scatterplot 2}
 df %>% 
@@ -577,4 +595,5 @@ df %>%
   scale_color_brewer(palette = "Set1") +
   guides(color = guide_legend(title = "Position"), alpha = "none")
 ```
+
 Now we have assigned colors for each data point to represent different positions. So now we not only have information on the association between age and distress, but have also have some information between distress and position (medical assistants appear to have higher distress compared to professor/physicians) *AND* position and age (younger people tend to be medical assistants). All of this is very intuitive when we think about it, and understanding these types of relationships is derived from a crucial discipline called 'causal inference'. This is not a statistics course so we will not venture further nevertheless, causal inference is something that underpins many fields who employ statistics to determine relationships between anything!
