@@ -317,7 +317,7 @@ boxplot(df$age)
 ```
 
 Pretty simple; pretty cool however, we have access to an even more powerful method of generating figures: ggplot. 
-``` {r univariate plot 2}
+``` {r univariate plot 2, warning=FALSE}
 df %>% 
   ggplot(aes(age, "")) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
@@ -339,7 +339,7 @@ ggplot(data = df, mapping=aes(x=age))
 ```
 
 Our figure is empty because we failed to add a very important layer: geoms. These are the geometric objects used to populate our figures. There are heaps of these, and people are constantly building new packages compatabile with ggplot() to make new fancy graphs all the time. We're going to stick with geom_barplot for consistency sake. We add new layers to our figure by connecting them with the '+' sign.  
-```{r univariate plot 4}
+```{r univariate plot 4, warning=FALSE}
 ggplot(data = df, mapping=aes(x=age)) +
   geom_boxplot()
 ```
@@ -348,13 +348,13 @@ Now it is starting to resemble what we're after! You can play around with other 
 
 ## Customizations
 We also have a range of customizations **within** our geoms, like color of the borders, fill colors, sizes of points, transparency of objects etc. You can always check the help documentation to see what customizations are available for the particular geom of interest, and they can vary quite widely! Let's continue to build on our figure like previous. 
-```{r univariate plot 5}
+```{r univariate plot 5, warning=FALSE}
 ggplot(data = df, mapping=aes(x=age)) + 
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5)
 ```
 
 These are all fairly self-explanatory, and this is certainly a non-exhaustive list of things to customize except alpha, which refers to the transparency of an object. This can be useful as per above. We do not have any outliers in our data set so the 'outlier' colors and shape won't do anything but it is useful code to know. Finally, colors can also be represented by hex code if you want to get especially detailed.
-``` {r univariate color brewer}
+``` {r univariate color brewer, warning=FALSE}
 ggplot(data = df, mapping=aes(x=age)) + 
   geom_boxplot(fill = "#ea9999", color = "#e06666", outlier.color = "#85f6db", outlier.shape = 16, outlier.size = 2, alpha = 0.5)
 ```
@@ -363,7 +363,7 @@ These can be found on websites like [color-hex](https://www.color-hex.com/) wher
 
 ## Shortcuts
 You may have noticed that in the previous figure's code there contains a few weird differences that were not present in the original fancy figure we made. This is because we can take advantage of the fact that R will assume certain things in some situations even if we don't specify it. For example:
-```{r univariate plot 6}
+```{r univariate plot 6, warning=FALSE}
 ggplot(data = df, mapping=aes(x=age)) +
   geom_boxplot()
 ```
@@ -376,14 +376,14 @@ These produce the exact same plot yet the latter requires significant less code.
 
 ## Piping 
 Another difference between our newer plots and our fancy original is how we assign the dataframe. Oftentimes you will see people assigning the the dataframe within the ggplot() function as we did directly above. This is not always desirable to us as it requires the data within the dateframe to be in the exact structure and format already. A useful way around this is to pipe the dataframe we want into the ggplot function.
-```{r univariate piping}
+```{r univariate piping, warning=FALSE}
 df %>% 
   ggplot(., aes(age)) +
   geom_boxplot()
 ```
 
 Here we first call the dataframe we want (df) and then pipe. The only change within the ggplot function is that we use '.' (period) in lieu of 'df' to tell R that we want to use the dataframe already called. This can be extremely useful as we can use a range of functions to change the dataframe before plotting.
-```{r univariate piping 2}
+```{r univariate piping 2, warning=FALSE}
 ## Filter for age
 df %>% 
   dplyr::filter(age<40) %>% 
@@ -401,7 +401,7 @@ Here we used another dplyr function called 'filter' (very useful) to tell R that
 
 ## Labelling
 Labelling our figures is extremely important and is commonly done insufficiently. Ggplot gives us tremendous amounts of customizations to label our figures in any way we see fit. Let's build on our previous figure and label some useful parts. 
-```{r univariate labelling}
+```{r univariate labelling, warning=FALSE}
 df %>% 
   ggplot(aes(age)) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
@@ -414,7 +414,7 @@ There are two important layers for labelling: 'labs' layer, and the 'theme' laye
 The theme layer is where we can make further adjustments to the labs layer. Here we use combinations of functions to select title, subtitle, axis title, and then adjust their typeface, size, positioning and more. We can also use 'element_blank' functions in any of these titles/text to remove these from our figures. This is useful in our case as we did not need a y-axis title so we can save some space in our figure by elimintating this (this also means that in our 'lab' layer it was unnecessary for us to assing the y-axis label with an empty value since we were elminiating the entire title in our theme layer!).
 
 Here's another useful trick we can do:
-```{r unviariate labelling 2}
+```{r unviariate labelling 2, warning=FALSE}
 df %>% 
   ggplot(aes(age)) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
@@ -430,7 +430,7 @@ This can be useful if you want to represent a difference between the median and 
 
 ## Coordinate flip
 One last thing you probably noticed about the figure is that it is differently coordinated. This is often a 'taste' situation about how you prefer to read figures but I always prefer my boxplots to have the independent variable presented vertically. Let's explore a couple of ways to change the orientation of our plot.
-```{r univariate coord}
+```{r univariate coord, warning=FALSE}
 # We can use the coord_flip function
 df %>% 
   ggplot(aes(age)) +
@@ -452,7 +452,7 @@ df %>%
 ```
 
 Here we can see the usefulness of the function coord_flip as opposed to assigning 'age' to the y-axis: coord_flip simply swaps the aesthetics while keeping the scaling. Despite this, many of the prior layers we have customized now need to be updated: the x-axis is no longer the axis we want labelled and our geom_vline label is the wrong angle. 
-``` {r coord flip}
+``` {r coord flip, warning=FALSE}
 df %>% 
   ggplot(aes(age)) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
@@ -467,7 +467,7 @@ We now have a pretty functional boxplot, not dissimilar to the earlier plot we p
 
 ## Themes
 Themes are a another useful customization we can add to the figures that give it a slightly more congruous feeling. 
-``` {r univariate theme customs}
+``` {r univariate theme customs, warning=FALSE}
 df %>% 
   ggplot(aes(age)) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
@@ -499,7 +499,7 @@ df %>%
 I saved this until last because its addition to our figure requires us to amend our code a little bit. We received an error when we ran that code that says : *`geom_point()` requires the following missing aesthetics: y.*
 
 Geom_jitter requires us to assign a value to our y-axis (in our case this appears as our x-axis due to coord_flip).
-``` {r geom jitter 2}
+``` {r geom jitter 2, warning=FALSE}
 df %>% 
   ggplot(aes(age, "")) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
@@ -584,7 +584,7 @@ df %>%
 ```
 
 Here we can see what appears to be a negative association between age and distress i.e., younger people had higher distress scores compared to older people. We have included a trend line using the geom 'geom_smooth' with linear regression as the method to generate the parameters of this line, including the standard error. We can go one step further if we want additional stratification within our plot.
-```{r scatterplot 2}
+```{r scatterplot 2, warning=FALSE}
 df %>% 
   ggplot(aes(x = age, y = distress)) +
   geom_point(aes(color = position_category)) + 
