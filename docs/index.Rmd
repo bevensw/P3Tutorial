@@ -469,7 +469,7 @@ There are many 'theme' packages to apply to the overall look of our figures. the
 
 ## Geom_jitter
 The final piece of the puzzle is another geom layer called 'geom_jitter'. This adds individual data points (much like a scatterplot) to our figure over the top of our boxplot, which is effectively a representation of our summary statistics. 
-```{r geom jitter}
+```{r geom jitter, error=TRUE}
 df %>% 
   ggplot(aes(age)) +
   geom_boxplot(fill = "steelblue", color = "darkblue", outlier.color = "red", outlier.shape = 16, outlier.size = 2, alpha = 0.5) +
