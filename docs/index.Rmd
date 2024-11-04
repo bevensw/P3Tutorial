@@ -568,7 +568,7 @@ First plot shows the counts of positions within each ethnicity category; second 
 
 ## Scatterplot
 Scatterplots are a great way to display two numerical variables against each other. We have one good numerical variable, age, but we lack another good numerical variable to plot it against. We can use the function 'rnorm' from the 'stats' package in R to create a variable with fake numeric data that we can plot age against.
-```{r scatterplot}
+```{r scatterplot, warning=FALSE}
  # Let's create some fake data for a variable called distress and we can pretend it's a distress scale score. 
 set.seed(5501) # Set.seed used in the context of a random number generator ensures that we produce the same set of numbers every time when we use this particular seed. This is important for reproducibility; this allows you and I to view the same data when running this code despite using a random number generator. 
 df <- df %>% 
