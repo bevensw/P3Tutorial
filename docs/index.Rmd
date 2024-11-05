@@ -1,18 +1,13 @@
 ---
 title: "Project 3 Focus Group Participant Survey"
-author: "WB"
+author: "Willaim Bevens"
 date: "`r Sys.Date()`"
 output:
-  html_document:
-    toc: yes
-    toc_float: yes
-    number_sections: yes
-    theme: lumen
-    highlight: tango
+  prettydoc::html_pretty:
+    number_sections: true
+    theme: cayman
+    highlight: github
     df_print: paged
-    code_folding: hide
-  pdf_document:
-    toc: yes
 ---
 <style>
 .custom-box {
@@ -597,3 +592,26 @@ df %>%
 ```
 
 Now we have assigned colors for each data point to represent different positions. So now we not only have information on the association between age and distress, but have also have some information between distress and position (medical assistants appear to have higher distress compared to professor/physicians) *AND* position and age (younger people tend to be medical assistants). All of this is very intuitive when we think about it, and understanding these types of relationships is derived from a crucial discipline called 'causal inference'. This is not a statistics course so we will not venture further nevertheless, causal inference is something that underpins many fields who employ statistics to determine relationships between anything!
+
+## Facets
+A final important function of ggplot I use fairly frequently is called 'faceting'. This is another way to include a 3rd (or more) variable visually except rather than add a third dimension to an existing plot, we create multiple plots that 'filter' for this third variable. Here's an example:
+```{r faceting, warning=FALSE}
+df %>% 
+  ggplot(., aes(age)) + 
+  geom_density()
+
+sample_sizes <- df %>% ## Need this dataframe for labels in the following facets.
+  group_by(ethnicity) %>%
+  dplyr::summarize(sample_size = n())
+
+df %>% 
+  ggplot(aes(age)) + 
+  geom_density() +
+  facet_wrap(~ethnicity, nrow = 2, ncol = 2, 
+             labeller = labeller(ethnicity = function(x) { ## I use this function to create sample size labels to put on the headers of each facet
+                 sample_size <- sample_sizes %>% filter(ethnicity == x) %>% pull(sample_size)
+                 paste0(x, " (n=", sample_size, ")")
+             }))
+```
+
+These are density plots (which I **rarely** use) but they look the nicest for the data we have available so here we are. The first plot we can see that the largest proportion of respondents are aged between 40 and 50 years. When we 'facet' these plots, we can see that this shape holds reasonably well for those who are 'Non-Hispanic', which makes sense considering they make up the majority of the overall sample. For those in the Hispanic group, the sample has more people around the 30 years mark. 
